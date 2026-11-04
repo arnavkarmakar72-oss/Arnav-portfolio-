@@ -14,7 +14,7 @@
 <section id="loginPanel" class="panel login"><p class="eyebrow">AUTHENTICATED ACCESS</p><h1>Welcome<br><em>back.</em></h1><form id="loginForm"><label>Email<input id="email" type="email" autocomplete="username" required></label><label>Password<input id="password" type="password" autocomplete="current-password" required></label><button type="submit">SIGN IN ↗</button></form><p id="loginMessage" class="message" aria-live="polite"></p></section>
 <section id="dashboard" hidden>
 <div class="dash-head"><div><p class="eyebrow">CONTENT STUDIO</p><h1>Your work,<br><em>your archive.</em></h1></div><button id="logoutButton" class="quiet">SIGN OUT</button></div>
-<div class="tabs"><button class="tab active" data-tab="films">FILMS</button><button class="tab" data-tab="photos">PHOTOGRAPHS</button></div>
+<div class="tabs"><button class="tab active" data-tab="films">FILMS</button><button class="tab" data-tab="photos">PHOTOGRAPHS</button><button class="tab" data-tab="covers">COVER IMAGES</button></div>
 <section id="filmsPanel" class="panel">
 <h2>Add a film</h2><p class="muted">Add a YouTube/Vimeo link, upload a video file, or do both. Uploaded files are stored in your media bucket.</p>
 <form id="filmForm" class="content-form">
@@ -39,6 +39,16 @@
 <label class="check"><input name="featured" type="checkbox"> Feature in the portfolio gallery</label>
 <button type="submit">UPLOAD PHOTOGRAPHS ↗</button><p class="message" id="photoMessage" aria-live="polite"></p>
 </form><div class="items"><h3>Uploaded photographs</h3><div id="photoList" class="item-list"></div></div>
+</section>
+<section id="coversPanel" class="panel" hidden>
+<h2>Manage cover images</h2><p class="muted">Upload images for the homepage, photography categories, or individual collections. Re-uploading the same placement replaces its cover without changing your photographs.</p>
+<form id="coverForm" class="content-form">
+<label>Where should this cover appear?<select name="placement" required><option value="home_hero">Homepage — main hero</option><option value="home_film">Homepage — Film card</option><option value="home_photography">Homepage — Photography card</option><option value="photo_category">Photography — category cover</option><option value="photo_collection">Photography — collection cover</option></select></label>
+<label>Category<select name="category"><option value="">Choose category (for category/collection covers)</option><option>Automotive</option><option>Photojournalism</option><option>Fashion</option><option>Product</option><option>Architecture &amp; Interior</option><option>Travel &amp; Landscape</option><option>Events</option></select></label>
+<label>Collection name<input name="collection" maxlength="120" placeholder="e.g. Hayabusa — only for collection covers"></label>
+<label>Cover image<input name="cover" type="file" accept="image/*" required></label>
+<button type="submit">SAVE COVER IMAGE ↗</button><p class="message" id="coverMessage" aria-live="polite"></p>
+</form><div class="items"><h3>Current cover images</h3><div id="coverList" class="item-list"></div></div>
 </section>
 </section>
 <footer><span>ARNAV KARMAKAR · CONTENT ADMIN</span><a href="index.html">VIEW PORTFOLIO ↗</a></footer>
