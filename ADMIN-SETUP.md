@@ -1,27 +1,33 @@
 # Portfolio admin setup
 
-The private content manager lives at `/admin.html`. The portfolio remains a static GitHub Pages site; Supabase supplies authentication, metadata and media storage.
+The admin dashboard is available at `/admin.html`. GitHub Pages hosts the site, while Supabase handles sign-in, portfolio metadata and uploaded media.
 
-## Your chosen workflow
+## Already configured
 
-- **Films:** add a YouTube/Vimeo link, upload a video file, or add both to one entry.
-- **Photographs:** upload one image or select multiple images at once. Each image becomes its own gallery entry.
-- Each entry supports a title, category, description/caption and featured flag.
-- The dashboard includes sign-in, content lists and delete controls.
+- Supabase project created in the Mumbai region.
+- Admin user's UUID added to the database and storage access policies.
+- `portfolio_items` table and public media bucket created.
+- `admin.js` connected with the project's publishable key.
+- Public homepage connected to the portfolio table. New uploads appear in the work grid automatically.
 
-## One-time setup
+## How to use the dashboard
 
-1. Create a Supabase project.
-2. In Authentication, create your own admin user. Keep public sign-ups disabled.
-3. Copy the project URL and anon/public key from Project Settings → API.
-4. Open `admin.js` and replace `YOUR_SUPABASE_PROJECT_URL` and `YOUR_SUPABASE_ANON_KEY`. The anon key is designed for browser use when Row Level Security is configured. **Never paste a service_role key into this repo.**
-5. In Authentication → Users, copy your admin user's UUID.
-6. Replace both occurrences of `YOUR_ADMIN_USER_UUID` in `supabase-schema.sql` with that UUID, then run the SQL in Supabase SQL Editor.
-7. Deploy the repository using GitHub Pages. Open `/admin.html` on the deployed site and sign in.
+1. Deploy the latest repository changes with GitHub Pages.
+2. Open your website's `/admin.html` page.
+3. Sign in using the admin email and password you created in Supabase Authentication.
+4. Add films using a YouTube/Vimeo link, a video file, or both. Add a poster if available.
+5. Add photographs individually or select multiple images for a bulk upload.
 
-## Important
+Each item supports a title, category, description/caption and featured flag. Uploaded items are stored in the `portfolio-media` bucket.
 
-- The SQL policies intentionally allow only the one configured admin UUID to upload, edit or delete. Public visitors can read portfolio entries and view media.
-- GitHub Pages is static hosting; it cannot securely store passwords or private server keys.
-- The initial admin dashboard stores metadata and media in Supabase. The existing homepage's sample cards are still placeholders; connecting live entries to the public gallery is a separate front-end integration step.
-- Large video uploads may hit storage limits or browser/network timeouts. For long films, use the YouTube/Vimeo link field; the file upload option is available for supported file sizes.
+## Security notes
+
+- The browser uses a Supabase publishable key, which is intended for public clients and is protected by Row Level Security.
+- Never put a Supabase service_role or secret key in this repository.
+- Only the configured admin UUID can add, update or delete portfolio entries and media. Public visitors can read portfolio entries and view media.
+- Keep public sign-ups disabled in Supabase Authentication.
+- Large video uploads may run into storage limits or browser/network timeouts. For long films, YouTube/Vimeo links are the more reliable option.
+
+## Database SQL
+
+The `supabase-schema.sql` file reflects the admin UUID and policies already applied to the connected project. Do not rerun it unless you intentionally need to recreate or update the schema.
