@@ -1,6 +1,6 @@
 -- Run this in the Supabase SQL Editor AFTER creating your Supabase project.
 -- 1) Create one admin user in Authentication > Users.
--- 2) Replace YOUR_ADMIN_USER_UUID below with that user's auth.users.id.
+-- 2) Replace 06a1dd9b-f2ad-48b6-a2a9-a3e01703d64a below with that user's auth.users.id.
 -- 3) Keep public sign-ups disabled. Do not expose a service_role key in frontend code.
 
 create extension if not exists pgcrypto;
@@ -29,8 +29,8 @@ for select using (true);
 drop policy if exists "Admin can manage portfolio" on public.portfolio_items;
 create policy "Admin can manage portfolio" on public.portfolio_items
 for all to authenticated
-using (auth.uid() = 'YOUR_ADMIN_USER_UUID'::uuid)
-with check (auth.uid() = 'YOUR_ADMIN_USER_UUID'::uuid);
+using (auth.uid() = '06a1dd9b-f2ad-48b6-a2a9-a3e01703d64a'::uuid)
+with check (auth.uid() = '06a1dd9b-f2ad-48b6-a2a9-a3e01703d64a'::uuid);
 
 insert into storage.buckets (id,name,public)
 values ('portfolio-media','portfolio-media',true)
@@ -44,15 +44,15 @@ for select using (bucket_id = 'portfolio-media');
 drop policy if exists "Admin can upload portfolio media" on storage.objects;
 create policy "Admin can upload portfolio media" on storage.objects
 for insert to authenticated
-with check (bucket_id = 'portfolio-media' and auth.uid() = 'YOUR_ADMIN_USER_UUID'::uuid);
+with check (bucket_id = 'portfolio-media' and auth.uid() = '06a1dd9b-f2ad-48b6-a2a9-a3e01703d64a'::uuid);
 
 drop policy if exists "Admin can update portfolio media" on storage.objects;
 create policy "Admin can update portfolio media" on storage.objects
 for update to authenticated
-using (bucket_id = 'portfolio-media' and auth.uid() = 'YOUR_ADMIN_USER_UUID'::uuid)
-with check (bucket_id = 'portfolio-media' and auth.uid() = 'YOUR_ADMIN_USER_UUID'::uuid);
+using (bucket_id = 'portfolio-media' and auth.uid() = '06a1dd9b-f2ad-48b6-a2a9-a3e01703d64a'::uuid)
+with check (bucket_id = 'portfolio-media' and auth.uid() = '06a1dd9b-f2ad-48b6-a2a9-a3e01703d64a'::uuid);
 
 drop policy if exists "Admin can delete portfolio media" on storage.objects;
 create policy "Admin can delete portfolio media" on storage.objects
 for delete to authenticated
-using (bucket_id = 'portfolio-media' and auth.uid() = 'YOUR_ADMIN_USER_UUID'::uuid);
+using (bucket_id = 'portfolio-media' and auth.uid() = '06a1dd9b-f2ad-48b6-a2a9-a3e01703d64a'::uuid);
