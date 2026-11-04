@@ -31,7 +31,7 @@ function loadSupabase() {
 }
 
 async function loadPortfolioItems() {
-  const grid = document.querySelector(".work-grid");
+  const pageKind = document.body.dataset.portfolioKind;\n  const grid = document.querySelector(".work-grid") || document.querySelector(".film-gallery") || document.querySelector(".photo-gallery");
   const note = document.querySelector(".coming-soon");
   if (!grid) return;
   try {
@@ -40,26 +40,26 @@ async function loadPortfolioItems() {
     const { data, error } = await client.from("portfolio_items")
       .select("*").order("created_at", { ascending: false });
     if (error) throw error;
-    if (!data?.length) return;
+    const visibleItems = pageKind === "film" ? data.filter(item => item.kind === "film") : pageKind === "photo" ? data.filter(item => item.kind === "photo") : data;\n    if (!visibleItems?.length) return;
 
     grid.replaceChildren();
     note?.remove();
     const storage = client.storage.from(MEDIA_BUCKET);
     const mediaUrl = (path) => path ? storage.getPublicUrl(path).data.publicUrl : "";
 
-    data.forEach((item, index) => {
+    visibleItems.forEach((item, index) => {
       const card = document.createElement("a");
-      card.className = "work-card uploaded-card";
+      card.className = pageKind === "photo" ? "photo-tile uploaded-photo-tile" : "work-card uploaded-card";
       const target = item.kind === "film"
         ? (item.video_url || mediaUrl(item.file_path))
         : mediaUrl(item.file_path);
-      card.href = target || "#work";
-      if (item.kind === "film" && target) {
+      if (pageKind === "photo") { card.type = "button"; card.dataset.category = (item.category || "people").toLowerCase(); } else { card.href = target || "#work"; }
+      if (item.kind === "film" && target && pageKind !== "film") {
         card.target = "_blank";
         card.rel = "noopener noreferrer";
       }
       const image = document.createElement("div");
-      image.className = "work-image uploaded-image";
+      image.className = pageKind === "photo" ? "photo-tile-art uploaded-image" : "work-image uploaded-image";
       const poster = mediaUrl(item.poster_path) || (item.kind === "photo" ? mediaUrl(item.file_path) : "");
       if (poster) {
         const img = document.createElement("img");
@@ -78,7 +78,7 @@ async function loadPortfolioItems() {
       const arrow = document.createElement("span");
       arrow.className = "image-arrow";
       arrow.textContent = "↗";
-      image.append(tag, title, arrow);
+      if (pageKind === "photo") { image.append(tag); } else { image.append(tag, title, arrow); }
       const meta = document.createElement("div");
       meta.className = "work-meta";
       const name = document.createElement("strong");
@@ -86,7 +86,7 @@ async function loadPortfolioItems() {
       const category = document.createElement("span");
       category.textContent = item.category || (item.kind === "film" ? "Film" : "Photography");
       meta.append(name, category);
-      card.append(image, meta);
+      if (pageKind === "photo") { const label = document.createElement("span"); label.textContent = item.title.toUpperCase(); card.append(image, label); } else { card.append(image, meta); }
       grid.appendChild(card);
     });
   } catch (error) {
