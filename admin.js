@@ -36,7 +36,7 @@ function renderList(target,items) {
   for(const item of items){
     const row=document.createElement("div");row.className="item";
     const info=document.createElement("div");const title=document.createElement("strong");title.textContent=item.title;
-    const sub=document.createElement("small");sub.textContent=(item.category||item.kind)+" · "+(item.featured?"Featured":"Standard");
+    const sub=document.createElement("small");sub.textContent=(item.category||item.kind)+(item.collection?" · "+item.collection:"")+" · "+(item.featured?"Featured":"Standard");
     info.append(title,sub);
     const del=document.createElement("button");del.textContent="DELETE";del.addEventListener("click",()=>removeItem(item));
     row.append(info,del);host.append(row);
@@ -77,7 +77,7 @@ async function handlePhotos(event){
     if(!files.length)throw new Error("Choose at least one photograph.");
     for(const file of files){
       const filePath=await upload(file,"photos");
-      await saveItem({kind:"photo",title:data.get("title").trim(),category:data.get("category").trim(),description:data.get("description").trim(),file_path:filePath,featured:data.get("featured")==="on"});
+      await saveItem({kind:"photo",title:(data.get("title").trim()||file.name.replace(/\\.[^.]+$/, "")),collection:data.get("collection").trim(),category:data.get("category").trim(),description:data.get("description").trim(),file_path:filePath,featured:data.get("featured")==="on"});
     }
     form.reset();message("#photoMessage",files.length+" photograph(s) uploaded.");
   }catch(e){message("#photoMessage","Error: "+e.message);}
