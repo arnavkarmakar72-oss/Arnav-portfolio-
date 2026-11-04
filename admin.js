@@ -49,6 +49,9 @@ async function refresh() {
   if(error) throw error;
   renderList("#filmList",data.filter(x=>x.kind==="film"));
   renderList("#photoList",data.filter(x=>x.kind==="photo"));
+  const {data:covers,error:coverError}=await db.from("portfolio_covers").select("*").order("created_at",{ascending:false});
+  if(coverError) throw coverError;
+  renderCoverList(covers||[]);
 }
 function renderList(target,items) {
   const host=$(target); host.replaceChildren();
@@ -62,6 +65,8 @@ function renderList(target,items) {
     row.append(info,del);host.append(row);
   }
 }
+function renderCoverList(items){const host=$("#coverList");host.replaceChildren();if(!items.length){host.textContent="No cover images uploaded yet.";return;}for(const item of items){const row=document.createElement("div");row.className="item";const info=document.createElement("div");const title=document.createElement("strong");title.textContent=item.placement.replaceAll("_"," ").toUpperCase();const sub=document.createElement("small");sub.textContent=(item.category||"")+(item.collection?" · "+item.collection:"");info.append(title,sub);const del=document.createElement("button");del.textContent="DELETE";del.addEventListener("click",async()=>{if(!confirm("Delete this cover image?"))return;try{const {error:storageError}=await db.storage.from(BUCKET).remove([item.file_path]);if(storageError)throw storageError;const {error}=await db.from("portfolio_covers").delete().eq("id",item.id);if(error)throw error;await refresh();}catch(e){alert("Could not delete cover: "+e.message);}});row.append(info,del);host.append(row);}}
+async function handleCover(event){event.preventDefault();const form=event.currentTarget,data=new FormData(form),btn=form.querySelector("button[type=submit]");btn.disabled=true;message("#coverMessage","Uploading cover image…");try{const placement=data.get("placement"),category=(data.get("category")||"").trim(),collection=(data.get("collection")||"").trim();if(placement==="photo_category"&&!category)throw new Error("Choose a category.");if(placement==="photo_collection"&&(!category||!collection))throw new Error("Choose a category and enter a collection name.");const key=placement==="photo_category"?"photo_category:"+category:placement==="photo_collection"?"photo_collection:"+category+":"+collection:placement;const file=await optimisePhoto(data.get("cover"));const filePath=await upload(file,"covers");const {data:existing,error:lookupError}=await db.from("portfolio_covers").select("id,file_path").eq("cover_key",key).maybeSingle();if(lookupError)throw lookupError;const values={cover_key:key,placement,category:category||null,collection:collection||null,file_path:filePath};const result=existing?await db.from("portfolio_covers").update(values).eq("id",existing.id):await db.from("portfolio_covers").insert(values);if(result.error)throw result.error;if(existing?.file_path)await db.storage.from(BUCKET).remove([existing.file_path]);form.reset();message("#coverMessage","Cover image saved.");await refresh();}catch(e){message("#coverMessage","Error: "+e.message);}finally{btn.disabled=false;}}
 async function removeItem(item){
   if(!confirm("Delete “"+item.title+"” from the portfolio?")) return;
   try{
@@ -117,8 +122,9 @@ async function showDashboard(){
 $("#logoutButton").addEventListener("click",async()=>{await db.auth.signOut();dashboard.hidden=true;loginPanel.hidden=false;});
 $("#filmForm").addEventListener("submit",handleFilm);
 $("#photoForm").addEventListener("submit",handlePhotos);
+$("#coverForm").addEventListener("submit",handleCover);
 document.querySelectorAll(".tab").forEach(tab=>tab.addEventListener("click",()=>{
   document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===tab));
-  $("#filmsPanel").hidden=tab.dataset.tab!=="films";$("#photosPanel").hidden=tab.dataset.tab!=="photos";
+  $("#filmsPanel").hidden=tab.dataset.tab!=="films";$("#photosPanel").hidden=tab.dataset.tab!=="photos";$("#coversPanel").hidden=tab.dataset.tab!=="covers";
 }));
 if(db) db.auth.getSession().then(({data})=>{if(data.session)showDashboard();});
