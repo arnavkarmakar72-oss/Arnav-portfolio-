@@ -18,6 +18,26 @@ if (configured && window.supabase) {
 function message(id, text) { $(id).textContent = text; }
 function safeName(name) { return name.normalize("NFKD").replace(/[^a-zA-Z0-9._-]+/g,"-").replace(/^-+|-+$/g,"").slice(-100); }
 function publicUrl(path) { return db.storage.from(BUCKET).getPublicUrl(path).data.publicUrl; }
+async function optimisePhoto(file) {
+  try {
+    const bitmap = await createImageBitmap(file);
+    const maxEdge = 2400;
+    const scale = Math.min(1, maxEdge / Math.max(bitmap.width, bitmap.height));
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.round(bitmap.width * scale);
+    canvas.height = Math.round(bitmap.height * scale);
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+    bitmap.close();
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/webp", 0.84));
+    if (!blob) return file;
+    const base = file.name.replace(/\\.[^.]+$/, "");
+    return new File([blob], base + ".webp", { type: "image/webp", lastModified: Date.now() });
+  } catch (error) {
+    console.warn("Photo optimisation unavailable; uploading original:", error);
+    return file;
+  }
+}
 async function upload(file, folder) {
   const path = folder + "/" + crypto.randomUUID() + "-" + safeName(file.name);
   const { error } = await db.storage.from(BUCKET).upload(path,file,{cacheControl:"31536000",upsert:false,contentType:file.type});
@@ -75,7 +95,8 @@ async function handlePhotos(event){
   btn.disabled=true;message("#photoMessage","Uploading "+files.length+" photograph(s)…");
   try{
     if(!files.length)throw new Error("Choose at least one photograph.");
-    for(const file of files){
+    for(const originalFile of files){
+      const file = await optimisePhoto(originalFile);
       const filePath=await upload(file,"photos");
       await saveItem({kind:"photo",title:(data.get("title").trim()||file.name.replace(/\.[^.]+$/, "")),collection:data.get("collection").trim(),category:data.get("category").trim(),description:data.get("description").trim(),file_path:filePath,featured:data.get("featured")==="on"});
     }
