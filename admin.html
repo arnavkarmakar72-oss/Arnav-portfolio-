@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Portfolio Admin — Arnav Karmakar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="admin.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="admin.js" defer></script>
+</head>
+<body><main class="shell">
+<header><a href="index.html" class="brand">AK<span>.</span></a><span class="eyebrow">PRIVATE CONTENT MANAGER</span></header>
+<section id="setupNotice" class="notice"><strong>One-time setup required</strong><p>Add your Supabase project URL and public anon key in <code>admin.js</code>, then run <code>supabase-schema.sql</code> in your Supabase SQL editor. Never put a service-role key in this website.</p></section>
+<section id="loginPanel" class="panel login"><p class="eyebrow">AUTHENTICATED ACCESS</p><h1>Welcome<br><em>back.</em></h1><form id="loginForm"><label>Email<input id="email" type="email" autocomplete="username" required></label><label>Password<input id="password" type="password" autocomplete="current-password" required></label><button type="submit">SIGN IN ↗</button></form><p id="loginMessage" class="message" aria-live="polite"></p></section>
+<section id="dashboard" hidden>
+<div class="dash-head"><div><p class="eyebrow">CONTENT STUDIO</p><h1>Your work,<br><em>your archive.</em></h1></div><button id="logoutButton" class="quiet">SIGN OUT</button></div>
+<div class="tabs"><button class="tab active" data-tab="films">FILMS</button><button class="tab" data-tab="photos">PHOTOGRAPHS</button></div>
+<section id="filmsPanel" class="panel">
+<h2>Add a film</h2><p class="muted">Add a YouTube/Vimeo link, upload a video file, or do both. Uploaded files are stored in your media bucket.</p>
+<form id="filmForm" class="content-form">
+<label>Film title<input name="title" required maxlength="120" placeholder="e.g. Spiti — People & Places"></label>
+<label>Category<input name="category" maxlength="60" placeholder="Documentary / Travel / Short film"></label>
+<label>Short description<textarea name="description" rows="3" maxlength="500" placeholder="A few words about the film"></textarea></label>
+<label>Video link (YouTube or Vimeo)<input name="video_url" type="url" placeholder="https://..."></label>
+<label>Or upload a video file<input name="video_file" type="file" accept="video/*"></label>
+<label>Poster / thumbnail<input name="poster" type="file" accept="image/*"></label>
+<label class="check"><input name="featured" type="checkbox"> Feature this film on the homepage</label>
+<button type="submit">SAVE FILM ↗</button><p class="message" id="filmMessage" aria-live="polite"></p>
+</form><div class="items"><h3>Published films</h3><div id="filmList" class="item-list"></div></div>
+</section>
+<section id="photosPanel" class="panel" hidden>
+<h2>Add photographs</h2><p class="muted">Select one image or many images in a single upload. Add a title and category to keep the archive organised.</p>
+<form id="photoForm" class="content-form">
+<label>Collection / title<input name="title" required maxlength="120" placeholder="e.g. Fragments of Everyday"></label>
+<label>Category<input name="category" maxlength="60" placeholder="People / Places / Automotive"></label>
+<label>Caption (optional)<textarea name="description" rows="2" maxlength="500"></textarea></label>
+<label>Select photographs<input name="photos" type="file" accept="image/*" multiple required></label>
+<label class="check"><input name="featured" type="checkbox"> Feature in the portfolio gallery</label>
+<button type="submit">UPLOAD PHOTOGRAPHS ↗</button><p class="message" id="photoMessage" aria-live="polite"></p>
+</form><div class="items"><h3>Uploaded photographs</h3><div id="photoList" class="item-list"></div></div>
+</section>
+</section>
+<footer><span>ARNAV KARMARKAR · CONTENT ADMIN</span><a href="index.html">VIEW PORTFOLIO ↗</a></footer>
+</main></body></html>
