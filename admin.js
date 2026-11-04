@@ -77,7 +77,7 @@ async function handlePhotos(event){
     if(!files.length)throw new Error("Choose at least one photograph.");
     for(const file of files){
       const filePath=await upload(file,"photos");
-      await saveItem({kind:"photo",title:(data.get("title").trim()||file.name.replace(/\\.[^.]+$/, "")),collection:data.get("collection").trim(),category:data.get("category").trim(),description:data.get("description").trim(),file_path:filePath,featured:data.get("featured")==="on"});
+      await saveItem({kind:"photo",title:(data.get("title").trim()||file.name.replace(/\.[^.]+$/, "")),collection:data.get("collection").trim(),category:data.get("category").trim(),description:data.get("description").trim(),file_path:filePath,featured:data.get("featured")==="on"});
     }
     form.reset();message("#photoMessage",files.length+" photograph(s) uploaded.");
   }catch(e){message("#photoMessage","Error: "+e.message);}
