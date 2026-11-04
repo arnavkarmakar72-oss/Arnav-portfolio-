@@ -1,7 +1,7 @@
-// Portfolio admin. Configure with your Supabase Project URL and anon/public key.
-// Never use a Supabase service_role key in browser code.
-const SUPABASE_URL = "YOUR_SUPABASE_PROJECT_URL";
-const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+// Portfolio admin. Uses the Supabase publishable key (safe for browser use with RLS).
+// Never use a Supabase service_role or secret key in browser code.
+const SUPABASE_URL = "https://cjmsflkhhhbyecgiyxil.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_WcsHFWd7-tcO39b0MxBMTg_ngI9TYzB";
 const BUCKET = "portfolio-media";
 const configured = !SUPABASE_URL.startsWith("YOUR_") && !SUPABASE_ANON_KEY.startsWith("YOUR_");
 const $ = (s) => document.querySelector(s);
