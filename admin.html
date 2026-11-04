@@ -19,7 +19,7 @@
 <h2>Add a film</h2><p class="muted">Add a YouTube/Vimeo link, upload a video file, or do both. Uploaded files are stored in your media bucket.</p>
 <form id="filmForm" class="content-form">
 <label>Film title<input name="title" required maxlength="120" placeholder="e.g. Spiti — People & Places"></label>
-<label>Category<input name="category" maxlength="60" placeholder="Documentary / Travel / Short film"></label>
+<label>Category<select name="category" required><option value="Documentary">Documentary</option><option value="Travel Films">Travel Films</option><option value="Fashion Films">Fashion Films</option><option value="Commercial Films">Commercial Films</option><option value="Fiction Films">Fiction Films</option></select></label>
 <label>Short description<textarea name="description" rows="3" maxlength="500" placeholder="A few words about the film"></textarea></label>
 <label>Video link (YouTube or Vimeo)<input name="video_url" type="url" placeholder="https://..."></label>
 <label>Or upload a video file<input name="video_file" type="file" accept="video/*"></label>
@@ -29,10 +29,11 @@
 </form><div class="items"><h3>Published films</h3><div id="filmList" class="item-list"></div></div>
 </section>
 <section id="photosPanel" class="panel" hidden>
-<h2>Add photographs</h2><p class="muted">Select one image or many images in a single upload. Add a title and category to keep the archive organised.</p>
+<h2>Add photographs</h2><p class="muted">Select one image or many images in a single upload. Give them a shared collection name and category.</p>
 <form id="photoForm" class="content-form">
-<label>Collection / title<input name="title" required maxlength="120" placeholder="e.g. Fragments of Everyday"></label>
-<label>Category<input name="category" maxlength="60" placeholder="People / Places / Automotive"></label>
+<label>Collection name<input name="collection" required maxlength="120" placeholder="e.g. Hayabusa"></label>
+<label>Category<select name="category" required><option value="People">People</option><option value="Places">Places</option><option value="Automotive">Automotive</option><option value="Experiments">Experiments</option></select></label>
+<label>Photo title (optional)<input name="title" maxlength="120" placeholder="Leave blank to use each filename"></label>
 <label>Caption (optional)<textarea name="description" rows="2" maxlength="500"></textarea></label>
 <label>Select photographs<input name="photos" type="file" accept="image/*" multiple required></label>
 <label class="check"><input name="featured" type="checkbox"> Feature in the portfolio gallery</label>
