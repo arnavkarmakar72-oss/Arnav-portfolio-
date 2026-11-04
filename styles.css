@@ -46,3 +46,37 @@ body{background:#0b0b0d;color:#f2eee9}
  .work-offset,.work-offset-small{margin-top:0}
  .section{padding-top:68px;padding-bottom:68px}
 }
+
+/* Dedicated film and photography pages */
+.navigation a.current{color:var(--text);border-bottom:1px solid var(--accent);padding-bottom:7px}
+.portfolio-page{padding-top:clamp(76px,11vw,140px);padding-bottom:100px}
+.page-intro{position:relative;padding-bottom:72px;border-bottom:1px solid var(--line)}
+.page-intro h1{font-size:clamp(64px,12vw,150px);line-height:.88;letter-spacing:-.095em;font-weight:500;margin:0 0 30px}
+.accent-period{color:var(--accent)}
+.page-description{max-width:490px;color:#b9b5ae;font-size:15px;line-height:1.85}
+.page-index{position:absolute;right:0;bottom:24px;color:var(--muted);font:9px var(--mono);letter-spacing:.13em}
+.portfolio-section{padding-top:82px}
+.portfolio-section-heading{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:30px}
+.portfolio-section-heading h2{font-size:clamp(27px,4vw,48px);line-height:.98;letter-spacing:-.07em;font-weight:500;margin:0}
+.portfolio-section-heading>span{font:9px var(--mono);letter-spacing:.12em;color:var(--muted)}
+.portfolio-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:42px 28px}
+.film-gallery .work-image{aspect-ratio:1.35}
+.film-gallery .work-meta{padding-top:14px}
+.empty-note{color:var(--muted);font-size:13px}
+.filters{display:flex;gap:9px;flex-wrap:wrap;margin:0 0 28px}
+.filter{border:1px solid var(--line);background:transparent;color:var(--muted);padding:10px 15px;font:9px var(--mono);letter-spacing:.12em;cursor:pointer}
+.filter.active,.filter:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+.photo-gallery{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.photo-tile{padding:0;border:0;background:none;color:var(--text);text-align:left;cursor:pointer;min-width:0}
+.photo-tile[hidden]{display:none}
+.photo-tile-art{aspect-ratio:4/5;position:relative;overflow:hidden;background:#282321;transition:transform .45s,filter .45s}
+.photo-tile:hover .photo-tile-art{transform:translateY(-4px);filter:brightness(1.15)}
+.photo-tile>span{display:block;padding-top:12px;font:9px var(--mono);letter-spacing:.12em;color:#c9c2b9}
+.photo-tile-art.image-one{background:linear-gradient(145deg,#171316,#572027 60%,#101013)}
+.photo-tile-art.image-two{background:linear-gradient(145deg,#111115,#35453d 60%,#171719)}
+.photo-tile-art.image-three{background:linear-gradient(145deg,#4b4036,#211e1c 60%,#111)}
+.photo-tile-art.image-four{background:linear-gradient(145deg,#42191f,#302326 55%,#111115)}
+.uploaded-photo-tile .photo-tile-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.page-cta{background:#171316;padding:85px 0;margin-top:30px}
+.page-cta h2{font-size:clamp(46px,7vw,84px);line-height:.95;letter-spacing:-.08em;font-weight:500;margin:15px 0 25px}
+@media(max-width:760px){.portfolio-page{padding-top:72px}.page-intro{padding-bottom:56px}.page-index{position:static;margin-top:26px}.portfolio-section{padding-top:60px}.portfolio-section-heading{align-items:start;flex-direction:column}.portfolio-gallery{grid-template-columns:1fr;gap:32px}.photo-gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 10px}.page-cta{padding:65px 0}}
